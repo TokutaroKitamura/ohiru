@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>ランダムメニュー決定</title>
   <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
@@ -14,7 +15,11 @@
       --accent-color: #FF9800;
       --text-color: #333333;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
     body {
       font-family: 'Noto Sans JP', sans-serif;
       background: var(--bg-color);
@@ -23,13 +28,15 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      padding: 16px;
     }
     #container {
       background: var(--card-bg);
-      padding: 40px;
+      padding: 24px;
       border-radius: 16px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      width: 360px;
+      width: 90%;
+      max-width: 360px;
       text-align: center;
     }
     .header {
@@ -37,14 +44,14 @@
       justify-content: center;
       align-items: center;
       gap: 0.5rem;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
     }
     .header-img {
       height: 1.5rem;
       width: auto;
     }
     h1 {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 700;
       color: var(--primary-color);
     }
@@ -53,14 +60,19 @@
       color: #fff;
       border: none;
       border-radius: 8px;
-      padding: 12px 24px;
+      padding: 10px 20px;
       font-size: 1rem;
       cursor: pointer;
       transition: background 0.3s;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
     }
-    #startBtn:hover:enabled { background: var(--primary-hover); }
-    #startBtn:disabled { background: #ccc; cursor: default; }
+    #startBtn:hover:enabled {
+      background: var(--primary-hover);
+    }
+    #startBtn:disabled {
+      background: #ccc;
+      cursor: default;
+    }
     #result {
       display: flex;
       flex-direction: column;
@@ -71,16 +83,26 @@
       justify-content: space-between;
       align-items: center;
     }
-    .label { font-weight: 700; font-size: 1rem; }
+    .label {
+      font-weight: 700;
+      font-size: 1rem;
+    }
     .result-item {
       background: var(--accent-color);
       color: #fff;
-      padding: 8px 12px;
+      padding: 6px 10px;
       border-radius: 8px;
-      min-width: 80px;
+      min-width: 60px;
       text-align: center;
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1rem;
+    }
+    @media (max-width: 400px) {
+      #container { padding: 16px; }
+      h1 { font-size: 1rem; }
+      #startBtn { padding: 8px 16px; font-size: 0.9rem; margin-bottom: 12px; }
+      .label { font-size: 0.9rem; }
+      .result-item { padding: 4px 8px; font-size: 0.9rem; min-width: 50px; }
     }
   </style>
 </head>
@@ -132,12 +154,15 @@
     function animate(key, list, duration) {
       return new Promise(res => {
         let count=0, intv=100, max=duration/intv;
-        const timer=setInterval(()=>{
-          const v=list[Math.floor(Math.random()*list.length)];
-          elems[key].textContent=v;
+        const timer = setInterval(() => {
+          const v = list[Math.floor(Math.random()*list.length)];
+          elems[key].textContent = v;
           count++;
-          if(count>=max){ clearInterval(timer); res(v); }
-        },intv);
+          if (count >= max) {
+            clearInterval(timer);
+            res(v);
+          }
+        }, intv);
       });
     }
   </script>
