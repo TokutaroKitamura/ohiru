@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ランダムメニュー決定</title>
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #f0f4f8;
+      --card-bg: #ffffff;
+      --primary-color: #4CAF50;
+      --primary-hover: #45A049;
+      --accent-color: #FF9800;
+      --text-color: #333333;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    #container {
+      background: var(--card-bg);
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 360px;
+      text-align: center;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 24px;
+    }
+    .header-img {
+      height: 1.5rem;
+      width: auto;
+    }
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+    #startBtn {
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin-bottom: 24px;
+    }
+    #startBtn:hover:enabled { background: var(--primary-hover); }
+    #startBtn:disabled { background: #ccc; cursor: default; }
+    #result {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .label { font-weight: 700; font-size: 1rem; }
+    .result-item {
+      background: var(--accent-color);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      min-width: 80px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div class="header">
+      <img src="azarashi.png" alt="あざらし" class="header-img">
+      <h1>今日のメニュー</h1>
+      <img src="azarashi.png" alt="あざらし" class="header-img">
+    </div>
+    <button id="startBtn">決定</button>
+    <div id="result">
+      <div class="result-row">
+        <span class="label">場所</span><span id="building" class="result-item">?</span>
+      </div>
+      <div class="result-row">
+        <span class="label">メニュー</span><span id="menu" class="result-item">?</span>
+      </div>
+      <div class="result-row">
+        <span class="label">トッピング</span><span id="topping" class="result-item">?</span>
+      </div>
+      <div class="result-row">
+        <span class="label">温度</span><span id="temp" class="result-item">?</span>
+      </div>
+    </div>
+  </div>
+  <script>
+    const buildings = ['C棟','D棟'];
+    const menus = {'C棟':['そば'],'D棟':['うどん','そば']};
+    const toppings = ['七味','天かす','全部'];
+    const temps = ['暖かい','冷たい'];
+    const elems = {
+      building: document.getElementById('building'),
+      menu: document.getElementById('menu'),
+      topping: document.getElementById('topping'),
+      temp: document.getElementById('temp'),
+      button: document.getElementById('startBtn')
+    };
+
+    elems.button.addEventListener('click', () => {
+      elems.button.disabled = true;
+      animate('building', buildings,1000)
+        .then(b => animate('menu', menus[b],1000))
+        .then(() => animate('topping', toppings,1000))
+        .then(() => animate('temp', temps,1000))
+        .finally(() => elems.button.disabled = false);
+    });
+
+    function animate(key, list, duration) {
+      return new Promise(res => {
+        let count=0, intv=100, max=duration/intv;
+        const timer=setInterval(()=>{
+          const v=list[Math.floor(Math.random()*list.length)];
+          elems[key].textContent=v;
+          count++;
+          if(count>=max){ clearInterval(timer); res(v); }
+        },intv);
+      });
+    }
+  </script>
+</body>
+</html>
